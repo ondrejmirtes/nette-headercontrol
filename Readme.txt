@@ -27,22 +27,22 @@ Example of component factory in Presenter:
 			->addKeywords(array('two', 'three'))
 			->setDescription('Our example site')
 			->setRobots('index,follow') //of course ;o)
-			->addRss('News', 'Rss:')
-			->addRss('Comments', 'Rss:comments');
-		
+			->addRssChannel('News', 'Rss:')
+			->addRssChannel('Comments', 'Rss:comments');
+
 		//CssLoader
 		$css = $header['css'];
 		$css->sourcePath = APP_DIR . '/templates/WebModule/css';
-    $css->sourceUri = Environment::getVariable('baseUri') . 'temp';
+		$css->sourceUri = Environment::getVariable('baseUri') . 'temp';
 
-    $css->tempUri = $css->sourceUri;
-    $css->tempPath = WWW_DIR . '/temp';
+		$css->tempUri = $css->sourceUri;
+		$css->tempPath = WWW_DIR . '/temp';
 
 		//JavascriptLoader
 		$js = $header['js'];
 		$js->tempUri = Environment::getVariable('baseUri') . 'temp';
-    $js->tempPath = WWW_DIR . '/temp';
-    $js->sourcePath = APP_DIR . '/templates/WebModule/js';
+		$js->tempPath = WWW_DIR . '/temp';
+		$js->sourcePath = APP_DIR . '/templates/WebModule/js';
 		
 		return $header;
 	}
