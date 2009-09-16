@@ -1,0 +1,11 @@
+{if isset($xmlProlog)}{!$xmlProlog}
+{/if}{!$docTypeString}
+<html{if $xml} xmlns="http://www.w3.org/1999/xhtml" xml:lang="{$language}" lang="{$language}"{/if}>
+<head>
+<meta http-equiv="Content-Language" content="{$language}"{if $xml} /{/if}>
+<meta http-equiv="Content-Type" content="{$contentType}; charset=utf-8"{if $xml} /{/if}>
+<title>{$title}</title>
+{if $favicon}<link rel="shortcut icon" href="{$baseUri . $favicon}"{if $xml} /{/if}>{/if}
+{foreach $metaTags as $name=>$value}
+<meta name="{$name}" content="{$value}"{if $xml} /{/if}>
+{/foreach}
