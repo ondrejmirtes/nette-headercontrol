@@ -165,6 +165,23 @@ class HeaderControl extends BaseControl {
 	public function isTitlesOrderReversed() {
 		return $this->titlesReverseOrder;
 	}
+	
+	public function getTitleString() {
+		if ($this->titles) {
+			if (!$this->titlesReverseOrder) {
+				array_unshift($this->titles, $this->title);
+			} else {
+				$this->titles = array_reverse($this->titles);
+				ksort($this->titles);
+				array_push($this->titles, $this->title);
+			}
+
+			return implode($this->titleSeparator, $this->titles);
+
+		} else {
+			return $this->title;
+		}
+	}
 
 	public function addRssChannel($title, $link) {
 		$this->rssChannels[] = array(
@@ -338,20 +355,8 @@ class HeaderControl extends BaseControl {
 
 		$template->language = $this->language;
 
-		if ($this->titles) {
-			if (!$this->titlesReverseOrder) {
-				array_unshift($this->titles, $this->title);
-			} else {
-				$this->titles = array_reverse($this->titles);
-				ksort($this->titles);
-				array_push($this->titles, $this->title);
-			}
+		$template->title = $this->getTitleString();
 
-			$template->title = implode($this->titleSeparator, $this->titles);
-
-		} else {
-			$template->title = $this->title;
-		}
 		$template->favicon = $this->favicon;
 		$template->metaTags = $this->metaTags;
 
