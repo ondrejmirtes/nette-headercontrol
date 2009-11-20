@@ -221,7 +221,7 @@ class HeaderControl extends BaseControl {
     }
     
     public function setFavicon($filename) {
-        if (file_exists(WWW_DIR . Environment::getVariable('baseUri') . $filename)) {
+        if (file_exists(WWW_DIR . '/' . $filename)) {
             $this->favicon = $filename;
         } else {
             throw new FileNotFoundException('Favicon ' . WWW_DIR . Environment::getVariable('baseUri') . $filename . ' not found.');
