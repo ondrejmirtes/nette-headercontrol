@@ -382,6 +382,8 @@ class HeaderControl extends BaseControl {
             }
         }
         
+        $template->xml = $this->docType == self::XHTML_1;
+        
         $template->channels = $this->rssChannels;
         
         $template->render();
