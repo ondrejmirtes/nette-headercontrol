@@ -6,6 +6,7 @@ class HeaderControl extends BaseControl {
      * docTypes
      */
     const HTML_4 = 'html4';
+    const HTML_5 = 'html5';
     const XHTML_1 = 'xhtml1';
     
     /**
@@ -72,7 +73,7 @@ class HeaderControl extends BaseControl {
     }
     
     public function setDocType($docType, $level=self::STRICT) {
-        if ($docType == self::HTML_4 || $docType == self::XHTML_1) {
+        if ($docType == self::HTML_4 || $docType == self::HTML_5 || $docType == self::XHTML_1) {
             $this->docType = $docType;
         } else {
             throw new InvalidArgumentException("Doctype $docType is not supported.");
@@ -424,6 +425,8 @@ class HeaderControl extends BaseControl {
             } else if ($level == self::FRAMESET) {
                 return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">';
             }
+        } else if ($docType == self::HTML_5) {
+            return '<!DOCTYPE html>';
         } else if ($docType == self::XHTML_1) {
             if ($level == self::STRICT) {
                 return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
