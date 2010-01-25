@@ -401,6 +401,8 @@ class HeaderControl extends Control {
 		}
 
 		$css->render();
+		
+		echo "\n";
 	}
 
 	public function renderJs() {
@@ -410,6 +412,8 @@ class HeaderControl extends Control {
 		}
 
 		$js->render();
+		
+		echo "\n";
 	}
 
 	private function getDocTypeString($docType=null) {
