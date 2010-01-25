@@ -19,7 +19,7 @@ Example of component factory in Presenter:
 
 <?php 
   protected function createComponentHeader() {
-		$header = new HeaderControl(HeaderControl::XHTML_1, HeaderControl::CZECH, 'Example title');
+		$header = new HeaderControl(HeaderControl::HTML_5, 'en', 'Example title');
 		
 		$header->setTitleSeparator(' | ')
 			->setTitlesReverseOrder(true)
@@ -34,15 +34,14 @@ Example of component factory in Presenter:
 		$css = $header['css'];
 		$css->sourcePath = APP_DIR . '/templates/WebModule/css';
 		$css->sourceUri = Environment::getVariable('baseUri') . 'temp';
-
 		$css->tempUri = $css->sourceUri;
 		$css->tempPath = WWW_DIR . '/temp';
 
 		//JavascriptLoader
 		$js = $header['js'];
+		$js->sourcePath = APP_DIR . '/templates/WebModule/js';
 		$js->tempUri = Environment::getVariable('baseUri') . 'temp';
 		$js->tempPath = WWW_DIR . '/temp';
-		$js->sourcePath = APP_DIR . '/templates/WebModule/js';
 		
 		return $header;
 	}
@@ -63,5 +62,4 @@ Example of component rendering using CSS, Javascript and RSS parameters (replace
 ===============
 
 Future:
-- support of more doctypes
 - phpDoc comments
