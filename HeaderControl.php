@@ -5,16 +5,17 @@ class HeaderControl extends BaseControl {
 	/**
 	 * docTypes
 	 */
-	const HTML_4 = 'html4';
-	const HTML_5 = 'html5';
-	const XHTML_1 = 'xhtml1';
+	const HTML_4 = self::HTML_4_STRICT; //backwards compatibility
+	const HTML_4_STRICT = 'html4_strict';
+	const HTML_4_TRANSITIONAL = 'html4_transitional';
+	const HTML_4_FRAMESET = 'html4_frameset';
 
-	/**
-	 * docType levels
-	 */
-	const STRICT = 'strict';
-	const TRANSITIONAL = 'transitional';
-	const FRAMESET = 'frameset';
+	const HTML_5 = 'html5';
+
+	const XHTML_1 = self::XHTML_1_STRICT; //backwards compatibility
+	const XHTML_1_STRICT = 'xhtml1_strict';
+	const XHTML_1_TRANSITIONAL = 'xhtml1_transitional';
+	const XHTML_1_FRAMESET = 'xhtml1_frameset';
 
 	/**
 	 * languages
@@ -31,7 +32,6 @@ class HeaderControl extends BaseControl {
 	const APPLICATION_XHTML = 'application/xhtml+xml';
 
 	private $docType;
-	private $docTypeLevel;
 
 	private $language;
 
@@ -74,17 +74,14 @@ class HeaderControl extends BaseControl {
 		return new JavaScriptLoader;
 	}
 
-	public function setDocType($docType, $level=self::STRICT) {
-		if ($docType == self::HTML_4 || $docType == self::HTML_5 || $docType == self::XHTML_1) {
+	public function setDocType($docType) {
+		if ($docType == self::HTML_4_STRICT || $docType == self::HTML_4_TRANSITIONAL ||
+				$docType == self::HTML_4_FRAMESET || $docType == self::HTML_5 ||
+				$docType == self::XHTML_1_STRICT || $docType == self::XHTML_1_TRANSITIONAL ||
+				$docType == self::XHTML_1_FRAMESET) {
 			$this->docType = $docType;
 		} else {
 			throw new InvalidArgumentException("Doctype $docType is not supported.");
-		}
-
-		if ($level == self::STRICT || $level == self::TRANSITIONAL || $level == self::FRAMESET) {
-			$this->docTypeLevel = $level;
-		} else {
-			throw new InvalidArgumentException("Doctype level $level is not supported.");
 		}
 
 		return $this; //fluent interface
@@ -92,10 +89,6 @@ class HeaderControl extends BaseControl {
 
 	public function getDocType() {
 		return $this->docType;
-	}
-
-	public function getDocTypeLevel() {
-		return $this->docTypeLevel;
 	}
 
 	public function setLanguage($language) {
@@ -200,7 +193,9 @@ class HeaderControl extends BaseControl {
 	}
 
 	public function setContentType($contentType, $force=false) {
-		if ($contentType == self::APPLICATION_XHTML && $this->docType != self::XHTML_1) {
+		if ($contentType == self::APPLICATION_XHTML &&
+				$this->docType != self::XHTML_1_STRICT && $this->docType != self::XHTML_1_TRANSITIONAL &&
+				$this->docType != self::XHTML_1_FRAMESET) {
 			throw new InvalidArgumentException("Cannot send $contentType type with non-XML doctype.");
 		}
 
@@ -340,7 +335,7 @@ class HeaderControl extends BaseControl {
 		$template->docType = $this->docType;
 		$template->docTypeString = $this->getDocTypeString();
 
-		if ($this->docType == self::XHTML_1 &&
+		if ($this->docType == self::XHTML_1_STRICT &&
 				$this->contentType == self::APPLICATION_XHTML &&
 				($this->forceContentType || $this->isClientXhtmlCompatible())) {
 			$template->xmlProlog = "<?xml version='1.0' encoding='utf-8'?>";
@@ -354,7 +349,9 @@ class HeaderControl extends BaseControl {
 			Environment::getHttpResponse()->setContentType(self::TEXT_HTML, 'utf-8');
 		}
 
-		$template->xml = $this->docType == self::XHTML_1;
+		$template->xml = ($this->docType == self::XHTML_1_STRICT ||
+							$this->docType == self::XHTML_1_TRANSITIONAL ||
+							$this->docType == self::XHTML_1_FRAMESET);
 
 		$template->language = $this->language;
 
@@ -385,7 +382,9 @@ class HeaderControl extends BaseControl {
 			}
 		}
 
-		$template->xml = $this->docType == self::XHTML_1;
+		$template->xml = ($this->docType == self::XHTML_1_STRICT ||
+							$this->docType == self::XHTML_1_TRANSITIONAL ||
+							$this->docType == self::XHTML_1_FRAMESET);
 
 		$template->channels = $this->rssChannels;
 
@@ -410,35 +409,35 @@ class HeaderControl extends BaseControl {
 		$js->render();
 	}
 
-	private function getDocTypeString($docType=null, $level=null) {
+	private function getDocTypeString($docType=null) {
 		if ($docType == null) {
 			$docType = $this->docType;
 		}
 
-		if ($level == null) {
-			$level = $this->docTypeLevel;
-		}
-
-		if ($docType == self::HTML_4) {
-			if ($level == self::STRICT) {
+		switch ($docType) {
+			case self::HTML_4_STRICT:
 				return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">';
-			} else if ($level == self::TRANSITIONAL) {
+			break;
+			case self::HTML_4_TRANSITIONAL:
 				return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">';
-			} else if ($level == self::FRAMESET) {
+			break;
+			case self::HTML_4_FRAMESET:
 				return '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">';
-			}
-		} else if ($docType == self::HTML_5) {
-			return '<!DOCTYPE html>';
-		} else if ($docType == self::XHTML_1) {
-			if ($level == self::STRICT) {
+			break;
+			case self::HTML_5:
+				return '<!DOCTYPE html>';
+			break;
+			case self::XHTML_1_STRICT:
 				return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-			} else if ($level == self::TRANSITIONAL) {
+			break;
+			case self::XHTML_1_TRANSITIONAL:
 				return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
-			} else if ($level == self::FRAMESET) {
+			break;
+			case self::XHTML_1_FRAMESET:
 				return '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">';
-			}
-		} else {
-			throw new InvalidStateException("Doctype $docType of level $level is not supported.");
+			break;
+			default:
+				throw new InvalidStateException("Doctype $docType is not supported.");
 		}
 	}
 
