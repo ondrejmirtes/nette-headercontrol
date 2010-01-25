@@ -4,8 +4,8 @@
  * HeaderControl<br />
  * This renderable component is ultimate solution for valid and complete HTML headers.
  *
- * @author Ondøej Mirtes
- * @copyright (c) Ondøej Mirtes 2009, 2010
+ * @author OndÅ™ej Mirtes
+ * @copyright (c) OndÅ™ej Mirtes 2009, 2010
  * @license MIT
  * @package HeaderControl
  */
