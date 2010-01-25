@@ -51,9 +51,6 @@ class HeaderControl extends BaseControl {
 
 	private $favicon;
 
-	private $minifyCss = false;
-	private $minifyJs = false;
-
 	public function __construct($docType, $language, $title) {
 		$this->setDocType($docType);
 		$this->setLanguage($language);
@@ -307,26 +304,6 @@ class HeaderControl extends BaseControl {
 
 	public function getRobots() {
 		return $this->getMetaTag('robots');
-	}
-
-	public function setMinifyCss($minifyCss) {
-		$this->minifyCss = (bool) $minifyCss;
-
-		return $this; //fluent interface
-	}
-
-	public function isCssMinified() {
-		return $this->minifyCss;
-	}
-
-	public function setMinifyJs($minifyJs) {
-		$this->minifyJs = (bool) $minifyJs;
-
-		return $this; //fluent interface
-	}
-
-	public function isJsMinified() {
-		return $this->minifyJs;
 	}
 
 	public function render() {
