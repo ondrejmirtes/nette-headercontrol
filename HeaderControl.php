@@ -33,6 +33,8 @@ class HeaderControl extends BaseControl {
 
 	private $docType;
 
+	private $xml;
+
 	private $language;
 
 	private $title;
@@ -80,6 +82,9 @@ class HeaderControl extends BaseControl {
 				$docType == self::XHTML_1_STRICT || $docType == self::XHTML_1_TRANSITIONAL ||
 				$docType == self::XHTML_1_FRAMESET) {
 			$this->docType = $docType;
+			$this->xml = Html::$xhtml = ($docType == self::XHTML_1_STRICT ||
+							$docType == self::XHTML_1_TRANSITIONAL ||
+							$docType == self::XHTML_1_FRAMESET);
 		} else {
 			throw new InvalidArgumentException("Doctype $docType is not supported.");
 		}
@@ -89,6 +94,10 @@ class HeaderControl extends BaseControl {
 
 	public function getDocType() {
 		return $this->docType;
+	}
+
+	public function isXml() {
+		return $this->xml;
 	}
 
 	public function setLanguage($language) {
@@ -329,66 +338,65 @@ class HeaderControl extends BaseControl {
 	}
 
 	public function renderBegin() {
-		$template = $this->createTemplate();
-		$template->setFile(dirname(__FILE__) . '/HeaderBegin.phtml');
-
-		$template->docType = $this->docType;
-		$template->docTypeString = $this->getDocTypeString();
-
+		$response = Environment::getHttpResponse();
 		if ($this->docType == self::XHTML_1_STRICT &&
 				$this->contentType == self::APPLICATION_XHTML &&
 				($this->forceContentType || $this->isClientXhtmlCompatible())) {
-			$template->xmlProlog = "<?xml version='1.0' encoding='utf-8'?>";
-			$template->contentType = self::APPLICATION_XHTML;
-
-			$response = Environment::getHttpResponse();
-			$response->setContentType(self::APPLICATION_XHTML, 'utf-8');
+			$contentType = self::APPLICATION_XHTML;
 			$response->setHeader('Vary', 'Accept');
+			echo "<?xml version='1.0' encoding='utf-8'?>\n";
 		} else {
-			$template->contentType = self::TEXT_HTML;
-			Environment::getHttpResponse()->setContentType(self::TEXT_HTML, 'utf-8');
+			$contentType = self::TEXT_HTML;
+			Environment::getHttpResponse()->setContentType($contentType, 'utf-8');
 		}
 
-		$template->xml = ($this->docType == self::XHTML_1_STRICT ||
-							$this->docType == self::XHTML_1_TRANSITIONAL ||
-							$this->docType == self::XHTML_1_FRAMESET);
+		$response->setContentType($contentType, 'utf-8');
 
-		$template->language = $this->language;
+		echo $this->getDocTypeString() . "\n";
 
-		$template->title = $this->getTitleString();
+		echo '<html' . ($this->xml ? ' xmlns="http://www.w3.org/1999/xhtml" xml:lang="'
+				. $this->language . '" lang="' . $this->language . '"' : '') . ">\n";
 
-		$template->favicon = $this->favicon;
-		$template->metaTags = $this->metaTags;
+		echo "<head>\n";
 
-		$template->render();
+		$metaLanguage = Html::el('meta')->content($this->language);
+		$metaLanguage->attrs['http-equiv'] = 'Content-Language';
+		echo $metaLanguage . "\n";
+		
+		$metaContentType = Html::el('meta')->content($contentType);
+		$metaContentType->attrs['http-equiv'] = 'Content-Type';
+		echo $metaContentType . "\n";
+
+		echo Html::el('title', $this->getTitleString()) . "\n";
+
+		if ($this->favicon != '') {
+			echo Html::el('link')->rel('shortcut icon')
+					->href(Environment::getVariable('baseUri') . $this->favicon) . "\n";
+		}
+
+		foreach ($this->metaTags as $name=>$content) {
+			echo Html::el('meta')->name($name)->content($content) . "\n";
+		}
 	}
 
 	public function renderEnd() {
-		$template = $this->createTemplate();
-		$template->setFile(dirname(__FILE__) . '/HeaderEnd.phtml');
-
-		$template->render();
+		echo "</head>\n";
 	}
 
 	public function renderRss($channels=null) {
-		$template = $this->createTemplate();
-		$template->setFile(dirname(__FILE__) . '/HeaderRss.phtml');
-
 		if ($channels !== null) {
 			$this->rssChannels = array();
 
-			foreach($channels as $title => $link) {
+			foreach ($channels as $title => $link) {
 				$this->addRssChannel($title, $link);
 			}
 		}
 
-		$template->xml = ($this->docType == self::XHTML_1_STRICT ||
-							$this->docType == self::XHTML_1_TRANSITIONAL ||
-							$this->docType == self::XHTML_1_FRAMESET);
-
-		$template->channels = $this->rssChannels;
-
-		$template->render();
+		foreach ($this->rssChannels as $channel) {
+			echo Html::el('link')->rel('alternate')->type('application/rss+xml')
+					->title($channel['title'])
+					->href(Environment::getApplication()->getPresenter()->link($channel['link'])) . "\n";
+		}
 	}
 
 	public function renderCss() {
