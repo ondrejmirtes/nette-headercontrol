@@ -9,7 +9,7 @@
  * @license MIT
  * @package HeaderControl
  */
-class HeaderControl extends BaseControl {
+class HeaderControl extends Control {
 
 	/**
 	 * doctypes
