@@ -123,14 +123,7 @@ class HeaderControl extends Control {
 	}
 
 	public function setLanguage($language) {
-		if ($language == self::CZECH ||
-				$language == self::SLOVAK ||
-				$language == self::ENGLISH ||
-				$language == self::GERMAN) {
-			$this->language = $language;
-		} else {
-			throw new InvalidArgumentException("Language $language is not supported.");
-		}
+		$this->language = $language;
 
 		return $this; //fluent interface
 	}
