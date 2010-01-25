@@ -1,9 +1,18 @@
 <?php
 
+/**
+ * HeaderControl<br />
+ * This renderable component is ultimate solution for valid and complete HTML headers.
+ *
+ * @author Ondøej Mirtes
+ * @copyright (c) Ondøej Mirtes 2009, 2010
+ * @license MIT
+ * @package HeaderControl
+ */
 class HeaderControl extends BaseControl {
 
 	/**
-	 * docTypes
+	 * doctypes
 	 */
 	const HTML_4 = self::HTML_4_STRICT; //backwards compatibility
 	const HTML_4_STRICT = 'html4_strict';
@@ -26,29 +35,45 @@ class HeaderControl extends BaseControl {
 	const GERMAN = 'de';
 
 	/**
-	 * contentTypes
+	 * content types
 	 */
 	const TEXT_HTML = 'text/html';
 	const APPLICATION_XHTML = 'application/xhtml+xml';
 
+	/** @var string doctype */
 	private $docType;
 
+	/** @var bool whether doctype is XML compatible or not */
 	private $xml;
 
+	/** @var string document language */
 	private $language;
 
+	/** @var string document title */
 	private $title;
+
+	/** @var string title separator */
 	private $titleSeparator;
+
+	/** @var bool whether title should be rendered in reverse order or not */
 	private $titlesReverseOrder = true;
+
+	/** @var array document hierarchical titles */
 	private $titles = array();
 
+	/** @var array site rss channels */
 	private $rssChannels = array();
 
+	/** @var array header meta tags */
 	private $metaTags = array();
 
+	/** @var string document content type */
 	private $contentType;
+
+	/** @var bool whether XML content type should be forced or not */
 	private $forceContentType;
 
+	/** @var string path to favicon (without @basePath) */
 	private $favicon;
 
 	public function __construct($docType, $language, $title) {
@@ -339,7 +364,7 @@ class HeaderControl extends BaseControl {
 		$metaLanguage = Html::el('meta')->content($this->language);
 		$metaLanguage->attrs['http-equiv'] = 'Content-Language';
 		echo $metaLanguage . "\n";
-		
+
 		$metaContentType = Html::el('meta')->content($contentType);
 		$metaContentType->attrs['http-equiv'] = 'Content-Type';
 		echo $metaContentType . "\n";
