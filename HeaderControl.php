@@ -73,7 +73,7 @@ class HeaderControl extends Control {
 	/** @var bool whether XML content type should be forced or not */
 	private $forceContentType;
 
-	/** @var string path to favicon (without @basePath) */
+	/** @var string path to favicon (without $basePath) */
 	private $favicon;
 
 	public function __construct($docType, $language, $title) {
