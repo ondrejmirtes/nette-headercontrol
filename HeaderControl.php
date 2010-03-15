@@ -339,13 +339,15 @@ class HeaderControl extends Control {
 				($this->forceContentType || $this->isClientXhtmlCompatible())) {
 			$contentType = self::APPLICATION_XHTML;
 			$response->setHeader('Vary', 'Accept');
-			echo "<?xml version='1.0' encoding='utf-8'?>\n";
 		} else {
 			$contentType = self::TEXT_HTML;
-			Environment::getHttpResponse()->setContentType($contentType, 'utf-8');
 		}
 
 		$response->setContentType($contentType, 'utf-8');
+		
+		if ($contentType == self::APPLICATION_XHTML) {
+			echo "<?xml version='1.0' encoding='utf-8'?>\n";
+		}
 
 		echo $this->getDocTypeString() . "\n";
 
