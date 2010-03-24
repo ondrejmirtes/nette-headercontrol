@@ -352,16 +352,26 @@ class HeaderControl extends Control {
 		echo $this->getDocTypeString() . "\n";
 
 		echo '<html' . ($this->xml ? ' xmlns="http://www.w3.org/1999/xhtml" xml:lang="'
-				. $this->language . '" lang="' . $this->language . '"' : '') . ">\n";
+				. $this->language . '" lang="' . $this->language . '"' : '');
+				
+		if ($this->docType == self::HTML_5) {
+			echo ' lang="' . $this->language . '"';
+		}
+		
+		echo ">\n";
 
 		echo "<head>\n";
 
-		$metaLanguage = Html::el('meta')->content($this->language);
-		$metaLanguage->attrs['http-equiv'] = 'Content-Language';
-		echo $metaLanguage . "\n";
+		if ($this->docType != self::HTML_5) {
+			$metaLanguage = Html::el('meta');
+			$metaLanguage->attrs['http-equiv'] = 'Content-Language';
+			$metaLanguage->content($this->language);
+			echo $metaLanguage . "\n";
+		}
 
-		$metaContentType = Html::el('meta')->content($contentType);
+		$metaContentType = Html::el('meta');
 		$metaContentType->attrs['http-equiv'] = 'Content-Type';
+		$metaContentType->content($contentType . '; charset=utf-8');
 		echo $metaContentType . "\n";
 
 		echo Html::el('title', $this->getTitleString()) . "\n";
