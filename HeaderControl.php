@@ -16,7 +16,8 @@ use WebLoader\JavascriptLoader;
  * @license MIT
  * @package HeaderControl
  */
-class HeaderControl extends Control {
+class HeaderControl extends Control
+{
 
 	/**
 	 * doctypes
@@ -63,7 +64,7 @@ class HeaderControl extends Control {
 	private $titleSeparator;
 
 	/** @var bool whether title should be rendered in reverse order or not */
-	private $titlesReverseOrder = true;
+	private $titlesReverseOrder = TRUE;
 
 	/** @var array document hierarchical titles */
 	private $titles = array();
@@ -83,7 +84,8 @@ class HeaderControl extends Control {
 	/** @var string path to favicon (without $basePath) */
 	private $favicon;
 
-	public function __construct($docType, $language, $title) {
+	public function __construct($docType, $language, $title)
+	{
 		$this->setDocType($docType);
 		$this->setLanguage($language);
 		$this->setTitle($title);
@@ -97,15 +99,18 @@ class HeaderControl extends Control {
 		}
 	}
 
-	protected function createComponentCss() {
+	protected function createComponentCss()
+	{
 		return new CssLoader;
 	}
 
-	protected function createComponentJs() {
+	protected function createComponentJs()
+	{
 		return new JavaScriptLoader;
 	}
 
-	public function setDocType($docType) {
+	public function setDocType($docType)
+	{
 		if ($docType == self::HTML_4_STRICT || $docType == self::HTML_4_TRANSITIONAL ||
 				$docType == self::HTML_4_FRAMESET || $docType == self::HTML_5 ||
 				$docType == self::XHTML_1_STRICT || $docType == self::XHTML_1_TRANSITIONAL ||
@@ -121,26 +126,31 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getDocType() {
+	public function getDocType()
+	{
 		return $this->docType;
 	}
 
-	public function isXml() {
+	public function isXml()
+	{
 		return $this->xml;
 	}
 
-	public function setLanguage($language) {
+	public function setLanguage($language)
+	{
 		$this->language = $language;
 
 		return $this; //fluent interface
 	}
 
-	public function getLanguage() {
+	public function getLanguage()
+	{
 		return $this->language;
 	}
 
-	public function setTitle($title) {
-		if ($title != null && $title != '') {
+	public function setTitle($title)
+	{
+		if ($title != NULL && $title != '') {
 			$this->title = $title;
 		} else {
 			throw new InvalidArgumentException("Title must be non-empty string.");
@@ -149,7 +159,8 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getTitle($index = 0) {
+	public function getTitle($index = 0)
+	{
 		if (count($this->titles) == 0) {
 			return $this->title;
 		} else if (count($this->titles)-1-$index < 0) {
@@ -159,7 +170,8 @@ class HeaderControl extends Control {
 		}
 	}
 
-	public function addTitle($title) {
+	public function addTitle($title)
+	{
 		if ($this->titleSeparator) {
 			$this->titles[] = $title;
 		} else {
@@ -169,31 +181,37 @@ class HeaderControl extends Control {
 		return $this;
 	}
 
-	public function getTitles() {
+	public function getTitles()
+	{
 		return $this->titles;
 	}
 
-	public function setTitleSeparator($separator) {
+	public function setTitleSeparator($separator)
+	{
 		$this->titleSeparator = $separator;
 
 		return $this; //fluent interface
 	}
 
-	public function getTitleSeparator() {
+	public function getTitleSeparator()
+	{
 		return $this->titleSeparator;
 	}
 
-	public function setTitlesReverseOrder($reverseOrder) {
+	public function setTitlesReverseOrder($reverseOrder)
+	{
 		$this->titlesReverseOrder = (bool) $reverseOrder;
 
 		return $this; //fluent interface
 	}
 
-	public function isTitlesOrderReversed() {
+	public function isTitlesOrderReversed()
+	{
 		return $this->titlesReverseOrder;
 	}
 
-	public function getTitleString() {
+	public function getTitleString()
+	{
 		if ($this->titles) {
 			if (!$this->titlesReverseOrder) {
 				array_unshift($this->titles, $this->title);
@@ -210,7 +228,8 @@ class HeaderControl extends Control {
 		}
 	}
 
-	public function addRssChannel($title, $link) {
+	public function addRssChannel($title, $link)
+	{
 		$this->rssChannels[] = array(
 				'title' => $title,
 				'link' => $link,
@@ -219,11 +238,13 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getRssChannels() {
+	public function getRssChannels()
+	{
 		return $this->rssChannels;
 	}
 
-	public function setContentType($contentType, $force=false) {
+	public function setContentType($contentType, $force = FALSE)
+	{
 		if ($contentType == self::APPLICATION_XHTML &&
 				$this->docType != self::XHTML_1_STRICT && $this->docType != self::XHTML_1_TRANSITIONAL &&
 				$this->docType != self::XHTML_1_FRAMESET) {
@@ -241,15 +262,18 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getContentType() {
+	public function getContentType()
+	{
 		return $this->contentType;
 	}
 
-	public function isContentTypeForced() {
+	public function isContentTypeForced()
+	{
 		return $this->forceContentType;
 	}
 
-	public function setFavicon($filename) {
+	public function setFavicon($filename)
+	{
 		if (file_exists(WWW_DIR . '/' . $filename)) {
 			$this->favicon = $filename;
 		} else {
@@ -259,45 +283,54 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getFavicon() {
+	public function getFavicon()
+	{
 		return $this->favicon;
 	}
 
-	public function setMetaTag($name, $value) {
+	public function setMetaTag($name, $value)
+	{
 		$this->metaTags[$name] = $value;
 
 		return $this; //fluent interface
 	}
 
-	public function getMetaTag($name) {
-		return isset($this->metaTags[$name]) ? $this->metaTags[$name] : null;
+	public function getMetaTag($name)
+	{
+		return isset($this->metaTags[$name]) ? $this->metaTags[$name] : NULL;
 	}
 
-	public function getMetaTags() {
+	public function getMetaTags()
+	{
 		return $this->metaTags;
 	}
 
-	public function setAuthor($author) {
+	public function setAuthor($author)
+	{
 		$this->setMetaTag('author', $author);
 
 		return $this; //fluent interface
 	}
 
-	public function getAuthor() {
+	public function getAuthor()
+	{
 		return $this->getMetaTag('author');
 	}
 
-	public function setDescription($description) {
+	public function setDescription($description)
+	{
 		$this->setMetaTag('description', $description);
 
 		return $this; //fluent interface
 	}
 
-	public function getDescription() {
+	public function getDescription()
+	{
 		return $this->getMetaTag('description');
 	}
 
-	public function addKeywords($keywords) {
+	public function addKeywords($keywords)
+	{
 		if (is_array($keywords)) {
 			if ($this->keywords) {
 				$this->setMetaTag('keywords', $this->getKeywords() . ', ' . implode(', ', $keywords));
@@ -317,21 +350,25 @@ class HeaderControl extends Control {
 		return $this; //fluent interface
 	}
 
-	public function getKeywords() {
+	public function getKeywords()
+	{
 		return $this->getMetaTag('keywords');
 	}
 
-	public function setRobots($robots) {
+	public function setRobots($robots)
+	{
 		$this->setMetaTag('robots', $robots);
 
 		return $this; //fluent interface
 	}
 
-	public function getRobots() {
+	public function getRobots()
+	{
 		return $this->getMetaTag('robots');
 	}
 
-	public function render() {
+	public function render()
+	{
 		$this->renderBegin();
 		$this->renderRss();
 		$this->renderCss();
@@ -339,7 +376,8 @@ class HeaderControl extends Control {
 		$this->renderEnd();
 	}
 
-	public function renderBegin() {
+	public function renderBegin()
+	{
 		$response = Environment::getHttpResponse();
 		if ($this->docType == self::XHTML_1_STRICT &&
 				$this->contentType == self::APPLICATION_XHTML &&
@@ -393,12 +431,14 @@ class HeaderControl extends Control {
 		}
 	}
 
-	public function renderEnd() {
+	public function renderEnd()
+	{
 		echo "</head>\n";
 	}
 
-	public function renderRss($channels=null) {
-		if ($channels !== null) {
+	public function renderRss($channels = NULL)
+	{
+		if ($channels !== NULL) {
 			$this->rssChannels = array();
 
 			foreach ($channels as $title => $link) {
@@ -413,20 +453,23 @@ class HeaderControl extends Control {
 		}
 	}
 
-	public function renderCss() {
+	public function renderCss()
+	{
 		call_user_func_array(array($this['css'], 'render'), func_get_args());
 
 		echo "\n";
 	}
 
-	public function renderJs() {
+	public function renderJs()
+	{
 		call_user_func_array(array($this['js'], 'render'), func_get_args());
 
 		echo "\n";
 	}
 
-	private function getDocTypeString($docType=null) {
-		if ($docType == null) {
+	private function getDocTypeString($docType = NULL)
+	{
+		if ($docType == NULL) {
 			$docType = $this->docType;
 		}
 
@@ -457,7 +500,8 @@ class HeaderControl extends Control {
 		}
 	}
 
-	private function isClientXhtmlCompatible() {
+	private function isClientXhtmlCompatible()
+	{
 		$req = Environment::getHttpRequest();
 		return stristr($req->getHeader('Accept'), 'application/xhtml+xml') ||
 				$req->getHeader('Accept') == '*/*';
