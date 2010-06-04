@@ -1,5 +1,12 @@
 <?php
 
+use Nette\Application\Control;
+use Nette\Web\Html;
+use Nette\Environment;
+
+use WebLoader\CssLoader;
+use WebLoader\JavascriptLoader;
+
 /**
  * HeaderControl<br />
  * This renderable component is ultimate solution for valid and complete HTML headers.
