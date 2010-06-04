@@ -84,11 +84,9 @@ class HeaderControl extends Control
 	/** @var string path to favicon (without $basePath) */
 	private $favicon;
 
-	public function __construct($docType, $language, $title)
+	public function __construct(IComponentContainer $parent = NULL, $name = NULL)
 	{
-		$this->setDocType($docType);
-		$this->setLanguage($language);
-		$this->setTitle($title);
+		parent::__construct($parent, $name);
 
 		$this->setContentType(self::TEXT_HTML);
 

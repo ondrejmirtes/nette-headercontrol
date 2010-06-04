@@ -18,9 +18,14 @@ This renderable component is ultimate solution for valid and complete HTML heade
 Example of component factory in Presenter:
 
 <?php 
-  protected function createComponentHeader() {
-		$header = new HeaderControl(HeaderControl::HTML_5, 'en', 'Example title');
-		
+  protected function createComponentHeader()
+  {
+		$header = new HeaderControl;
+
+		$header->setDocType(HeaderControl::HTML_5);
+		$header->setLanguage('en');
+		$header->setTitle('Example title');
+
 		$header->setTitleSeparator(' | ')
 			->setTitlesReverseOrder(true)
 			->addKeywords('one')
@@ -32,17 +37,16 @@ Example of component factory in Presenter:
 
 		//CssLoader
 		$css = $header['css'];
-		$css->sourcePath = APP_DIR . '/templates/WebModule/css';
-		$css->sourceUri = Environment::getVariable('baseUri') . 'temp';
-		$css->tempUri = $css->sourceUri;
+		$css->sourcePath = APP_DIR . '/FrontModule/templates/css';
+		$css->tempUri = Environment::getVariable('baseUri') . 'temp';
 		$css->tempPath = WWW_DIR . '/temp';
 
 		//JavascriptLoader
 		$js = $header['js'];
-		$js->sourcePath = APP_DIR . '/templates/WebModule/js';
 		$js->tempUri = Environment::getVariable('baseUri') . 'temp';
 		$js->tempPath = WWW_DIR . '/temp';
-		
+		$js->sourcePath = APP_DIR . '/FrontModule/templates/js';
+
 		return $header;
 	}
 ?>
