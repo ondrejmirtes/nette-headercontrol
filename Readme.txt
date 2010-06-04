@@ -25,6 +25,9 @@ Example of component factory in Presenter:
 		$header->setDocType(HeaderControl::HTML_5);
 		$header->setLanguage('en');
 		$header->setTitle('Example title');
+		
+		// facebook xml namespace
+		$header->htmlTag->attrs['xmlns:fb'] = 'http://www.facebook.com/2008/fbml';
 
 		$header->setTitleSeparator(' | ')
 			->setTitlesReverseOrder(true)

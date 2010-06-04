@@ -74,6 +74,9 @@ class HeaderControl extends Control
 
 	/** @var array header meta tags */
 	private $metaTags = array();
+	
+	/** @var Html &lt;html&gt; tag */
+	private $htmlTag;
 
 	/** @var string document content type */
 	private $contentType;
@@ -364,6 +367,34 @@ class HeaderControl extends Control
 	{
 		return $this->getMetaTag('robots');
 	}
+	
+	public function setHtmlTag(Html $htmlTag)
+	{
+		$this->htmlTag = $html;
+		
+		return $this; // fluent interface
+	}
+	
+	public function getHtmlTag()
+	{
+		if ($this->htmlTag == NULL) {
+			$html = Html::el('html');
+		
+			if ($this->xml) {
+				$html->attrs['xmlns'] = 'http://www.w3.org/1999/xhtml';
+				$html->attrs['xml:lang'] = $this->language;
+				$html->attrs['lang'] = $this->language;
+			}
+		
+			if ($this->docType == self::HTML_5) {
+				$html->attrs['lang'] = $this->language;
+			}
+			
+			$this->htmlTag = $html;
+		}
+		
+		return $this->htmlTag;
+	}
 
 	public function render()
 	{
@@ -394,14 +425,7 @@ class HeaderControl extends Control
 
 		echo $this->getDocTypeString() . "\n";
 
-		echo '<html' . ($this->xml ? ' xmlns="http://www.w3.org/1999/xhtml" xml:lang="'
-				. $this->language . '" lang="' . $this->language . '"' : '');
-				
-		if ($this->docType == self::HTML_5) {
-			echo ' lang="' . $this->language . '"';
-		}
-		
-		echo ">\n";
+		echo $this->getHtmlTag()->startTag() . "\n";
 
 		echo "<head>\n";
 
