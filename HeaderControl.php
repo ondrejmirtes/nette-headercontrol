@@ -412,12 +412,16 @@ class HeaderControl extends Control
 				$this->contentType == self::APPLICATION_XHTML &&
 				($this->forceContentType || $this->isClientXhtmlCompatible())) {
 			$contentType = self::APPLICATION_XHTML;
-			$response->setHeader('Vary', 'Accept');
+			if (!headers_sent()) {
+				$response->setHeader('Vary', 'Accept');
+			}
 		} else {
 			$contentType = self::TEXT_HTML;
 		}
 
-		$response->setContentType($contentType, 'utf-8');
+		if (!headers_sent()) {
+			$response->setContentType($contentType, 'utf-8');
+		}
 		
 		if ($contentType == self::APPLICATION_XHTML) {
 			echo "<?xml version='1.0' encoding='utf-8'?>\n";
