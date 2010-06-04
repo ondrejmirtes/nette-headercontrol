@@ -427,7 +427,7 @@ class HeaderControl extends Control
 
 		echo $this->getHtmlTag()->startTag() . "\n";
 
-		echo "<head>\n";
+		echo Html::el('head')->startTag() . "\n";
 
 		if ($this->docType != self::HTML_5) {
 			$metaLanguage = Html::el('meta');
@@ -455,7 +455,7 @@ class HeaderControl extends Control
 
 	public function renderEnd()
 	{
-		echo "</head>\n";
+		echo Html::el('head')->endTag();
 	}
 
 	public function renderRss($channels = NULL)
