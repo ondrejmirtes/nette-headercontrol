@@ -414,24 +414,14 @@ class HeaderControl extends Control {
 	}
 
 	public function renderCss() {
-		$css = $this['css'];
-		if (func_num_args() > 0) {
-			$css->addFiles(func_get_args());
-		}
+		call_user_func_array(array($this['css'], 'render'), func_get_args());
 
-		$css->render();
-		
 		echo "\n";
 	}
 
 	public function renderJs() {
-		$js = $this['js'];
-		if (func_num_args() > 0) {
-			$js->addFiles(func_get_args());
-		}
+		call_user_func_array(array($this['js'], 'render'), func_get_args());
 
-		$js->render();
-		
 		echo "\n";
 	}
 
