@@ -1,6 +1,5 @@
 <?php
 
-use Nette\Application\Control;
 use Nette\Web\Html;
 use Nette\Environment;
 
@@ -16,7 +15,7 @@ use WebLoader\JavascriptLoader;
  * @license MIT
  * @package HeaderControl
  */
-class HeaderControl extends Control
+class HeaderControl extends RenderableContainer
 {
 
 	/**
@@ -401,7 +400,9 @@ class HeaderControl extends Control
 		$this->renderBegin();
 		$this->renderRss();
 		$this->renderCss();
+		echo "\n";
 		$this->renderJs();
+		echo "\n";
 		$this->renderEnd();
 	}
 
@@ -477,20 +478,6 @@ class HeaderControl extends Control
 					->title($channel['title'])
 					->href(Environment::getApplication()->getPresenter()->link($channel['link'])) . "\n";
 		}
-	}
-
-	public function renderCss()
-	{
-		call_user_func_array(array($this['css'], 'render'), func_get_args());
-
-		echo "\n";
-	}
-
-	public function renderJs()
-	{
-		call_user_func_array(array($this['js'], 'render'), func_get_args());
-
-		echo "\n";
 	}
 
 	private function getDocTypeString($docType = NULL)
